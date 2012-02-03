@@ -1,0 +1,41 @@
+Note-off
+========
+
+0x80 to 0x8F  ->  Low nibble = channel
+
+Two arguments (bytes):
+  * Note number: 0 to 127 (Middle C = 60)
+  * Velocity: 0 to 127. How quick the note should be released (127 = fastest)
+  
+  
+Note-on
+=======
+
+0x90 to 0x9F  ->  Low nibble = channel
+
+Two arguments (bytes):
+  * Note number: 0 to 127 (Middle C = 60)
+  * Velocity: 0 to 127. How much force the note should be played (127 = the most force)
+
+  
+Controller
+==========
+
+0xB0 to 0xBF  ->  Low nibble = channel
+
+Two arguments (bytes):
+  * Controller number
+  * Argument to controller
+  
+Controller numbers used in code:
+  * 0   bank select
+  * 7   volumen
+  
+  
+Program change
+==============
+
+0xC0 to 0xCF  ->  Low nibble = channel
+
+One argument (byte):
+  * Program number = Instrument

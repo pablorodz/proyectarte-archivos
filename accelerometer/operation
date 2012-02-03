@@ -1,0 +1,13 @@
+Vdd = -0.3v to 3.6v
+
+g-Select: (pull-down)
+  * 0 -> g-Range = 3g -> Sensitivity = 440 mv/g
+  * 1 -> g-Range = 11g -> Sensitivity = 117.5 mv/g
+  
+Sleep Mode:
+  /SLP = 0 -> Device spleeping
+  
+Pines:
+  * x, y, z conectados a conversor A/D con capacitor a tierra (3.3nF)
+  * /SLP, GSEL, TEST conectados a algun puerto
+  * zeroG-Detect pin outputs high when all three axes simultaneously detect 0g, which happens when the board is in free-fall
