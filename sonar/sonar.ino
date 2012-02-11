@@ -52,14 +52,14 @@
  */
 
 #include <SoftwareSerial.h>
-
+ 
 // These constants won't change.  They're used to give names to the pins used:
-const int TXpin = 0;
-const int RXpin = 1;
+const int TXpin = ;  // Sensor transmition pin
+const int RXpin = ;  // Sensor receiver pin
 const int ANpin = A0;
 const int PWpin = 2;
-const int BWpin = 3;
-const int VCC = 4;
+const int BWpin = 5;
+const int VCC = 6;
 const int ledPin = 13;
 
 // Variables for the indivial calculated distances (Inches)
@@ -68,19 +68,23 @@ float distanceSerial = 0;
 float distanceAN = 0;
 
 // Define serial communication
-SoftwareSerial mySerial(RXpin, TXpin);
+SoftwareSerial mySerial(TXpin, RXpin);
 
 void setup() {
+  Serial.begin(9600);
+  
   mySerial.begin(9600);   // Init serial
   pinMode(ANpin, INPUT);
   pinMode(PWpin, INPUT);
-  pinmode(BWpin, OUTPUT);
+  pinMode(BWpin, OUTPUT);
+  pinMode(VCC, OUTPUT);
+  pinMode(ledPin, OUTPUT);
   
   digitalWrite(BWpin, LOW); // For serial communication
   
   // 250mS after power-up, the LV-MaxSonar -EZ0 is ready to accept the RX command
   digitalWrite(VCC, HIGH);
-  delay(250)  // ¿? 
+  delay(250);  // ¿? 
   
   // Calibrating (first reading)
   calibrate();
@@ -92,7 +96,7 @@ void loop() {
   //LV-MaxSonar -EZ0 sends thirteen 42KHz waves
   
   // Start ranging
-  startPulse()
+  startPulse();
   
   // after which the pulse width pin (PW) is set high. When a target is 
   // detected the PW pin is pulled low. The PW pin is high for up to 37.5mS 
@@ -114,7 +118,14 @@ void loop() {
   distanceAN = rangeAN();
   
   // Do something
-  // ...
+  Serial.print("PWM: ");
+  Serial.println(distancePW);
+  Serial.print("Serie: ");
+  Serial.println(distanceSerial);
+  Serial.print("Analogico: ");
+  Serial.println(distanceAN);
+  
+  delay(1000);
 }
 
 /* 
@@ -122,7 +133,7 @@ void loop() {
  */
 void startPulse() {
   digitalWrite(RXpin, HIGH);
-  delay(22);  // Delay higher than 20uS
+  delay(40);  // Delay higher than 20uS
   digitalWrite(RXpin, LOW);
 }
 
@@ -189,8 +200,8 @@ float rangeSerial() {  // -> Integer
   }
   
   // String to integer
-  char t[str.length()+1];
-  str.toCharArray(t, sizeof(t));
+  char t[data.length()+1];
+  data.toCharArray(t, sizeof(t));
   distance = (float) atoi(t);  // Inches
   
   return distance;
@@ -203,7 +214,7 @@ float rangeSerial() {  // -> Integer
  */
 float rangeAN() {
   int voltage = mapf(analogRead(ANpin), 0, 1023, 0, 5);
-  distanceAN = voltage / 0.0098;  // Inches
+  float distance = voltage / 0.0098;  // Inches
   
   return distance;
 }
@@ -229,9 +240,9 @@ void calibrate() {
 void reset() {
   digitalWrite(VCC, LOW);  // Power-off
   delay(50);  // Some time
-  digitalWrite(VCC, HiGH);
+  digitalWrite(VCC, HIGH);
   
-  calibrate()
+  calibrate();
 }
 
 /*

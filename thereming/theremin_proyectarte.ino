@@ -24,20 +24,15 @@ unsigned long distance = 0; // variable for storing the distance
 int ledPin = 13;    // Notification led
 
 void setup() {
-    Serial.begin(9600);
+  Serial.begin(9600);
 
     // declare the ledPin as an OUTPUT:
-    pinMode(ledPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
 }
 
 void loop() {
-    // read the value from the sensor:
-    voltage = mapf(analogRead(sensorPin), 0, 1023, 0, 5);
-    distance = 27.3701 * pow(voltage, -1.2014);
-    
-    
-    
-    delay();                  
+  
+  
 }
 
 /*
